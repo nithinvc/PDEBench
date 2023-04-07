@@ -1,0 +1,56 @@
+# @package _global_
+
+# specify here default sim configuration
+defaults:
+  - _self_
+hydra:
+  sweep:
+    dir: /data/nithinc/generated_pdebench/hydra/2D/ReactionDiffusion/${hydra.job.name}
+    subdir: job-${hydra.job.num}-${hydra.job.override_dirname}-${now:%d-%m-%Y_%H-%M-%S}
+  job:
+    env_set:
+      OMP_NUM_THREADS: 4
+      MKL_NUM_THREADS: 4
+      OPENBLAS_NUM_THREADS: 4
+      VECLIB_MAXIMUM_THREADS: 4
+      NUMEXPR_NUM_THREADS: 4
+      CUDA_VISIBLE_DEVICES: 9
+      VISIBLE_CPUS: 4
+      DDE_BACKEND: jax
+
+# path to original working directory
+# hydra hijacks working directory by changing it to the current log directory,
+# so it's useful to have this path as a special variable
+# https://hydra.cc/docs/next/tutorials/basic/running_your_app/working_directory
+work_dir: ${hydra:runtime.cwd}
+
+# path to folder with data
+data_dir: /data/nithinc/generated_pdebench/2D/ReactionDiffusion/
+upload: false
+
+output_path: 2D_diff-react_Du=${sim.Du}_Dv=${sim.Dv}_k=${sim.k}
+
+# name of the run, accessed by loggers
+name: 2d_diff-react_Du=${sim.Du}_Dv=${sim.Dv}_k=${sim.k}
+num_samples: 50
+
+sim:
+  Du: ???
+  Dv: ???
+  k: ???
+  t: 5
+  tdim: 101
+  x_left: -1.0
+  x_right: 1.0
+  xdim: 128
+  y_bottom: -1.0
+  y_top: 1.0
+  ydim: 128
+  n: 1
+  seed: "???"
+
+plot:
+  t_idx: 1.0 # Fraction of the final time step idx to be plotted
+  dim: 2 # Spatial dimension
+  channel_idx: 0 # Index of the variable to be plotted
+
