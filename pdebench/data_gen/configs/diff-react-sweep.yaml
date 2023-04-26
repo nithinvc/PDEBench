@@ -1,11 +1,12 @@
 # @package _global_
 
 # specify here default sim configuration
+parent_dir: /data/nithinc/pdebench/new_parameters
 defaults:
   - _self_
 hydra:
   sweep:
-    dir: /data/nithinc/generated_pdebench/hydra/2D/ReactionDiffusion/${hydra.job.name}
+    dir: ${parent_dir}/hydra/2D/ReactionDiffusion/${hydra.job.name}
     subdir: job-${hydra.job.num}-${hydra.job.override_dirname}-${now:%d-%m-%Y_%H-%M-%S}
   job:
     env_set:
@@ -25,14 +26,15 @@ hydra:
 work_dir: ${hydra:runtime.cwd}
 
 # path to folder with data
-data_dir: /data/nithinc/generated_pdebench/2D/ReactionDiffusion/
+data_dir: ${parent_dir}/2D/ReactionDiffusion/
 upload: false
 
 output_path: 2D_diff-react_Du=${sim.Du}_Dv=${sim.Dv}_k=${sim.k}
 
 # name of the run, accessed by loggers
 name: 2d_diff-react_Du=${sim.Du}_Dv=${sim.Dv}_k=${sim.k}
-num_samples: 50
+#num_samples: 50
+num_samples: 5
 
 sim:
   Du: ???
@@ -54,3 +56,10 @@ plot:
   dim: 2 # Spatial dimension
   channel_idx: 0 # Index of the variable to be plotted
 
+### Various debugging artifacts
+debug_path: ${data_dir}/debug
+residuals: true
+residual_path: ${debug_path}/residuals.h5
+
+visualize: true
+visualization_path: ${debug_path}/visualizations/Du=${sim.Du}_Dv=${sim.Dv}_k=${sim.k}/

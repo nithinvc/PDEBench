@@ -116,6 +116,21 @@ def main(config: DictConfig):
     pool.close()
     pool.join()
 
+    if config.residuals:
+        from pdebench.data_gen.src import residuals
+        os.makedirs(os.path.dirname(config.residual_path), exist_ok=True)
+        residuals.reaction_diff_2d_residual(
+            config.output_path,
+            config.residual_path,
+            config.sim)
+    if config.visualize:
+        from pdebench.data_gen.src import residuals
+        os.makedirs(config.visualization_path, exist_ok=True)
+        residuals.visualize_2d_reaction_diffusion(
+            config.output_path,
+            config.visualization_path,
+            config.sim)
+
     if config.upload:
         dataverse_upload(
             file_path=config.output_path,
